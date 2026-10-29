@@ -1,0 +1,52 @@
+# J.A.R.V.I.S MUSIC: dependências do backend.
+# O PyTorch não vai aqui: ele precisa da versão com CUDA, instalada à parte
+# (veja o README; a RTX 5080 exige CUDA 12.8 ou mais novo).
+
+# separação de instrumentos (BS-RoFormer SW e outros modelos do UVR)
+audio-separator>=0.24
+
+# análise de áudio
+librosa>=0.10
+soundfile>=0.12
+audioread>=3.0  # o audio-separator usa, e o librosa 1.0 parou de trazer
+numpy>=1.24
+
+# BPM e compassos (estado da arte; cai no librosa se faltar)
+beat-this>=0.1.0
+
+# transcrição de notas
+# O basic-pitch em si é instalado com --no-deps pelo instalar.bat: no Windows ele
+# exige um TensorFlow antigo que não existe para Python 3.12+. Aqui vão só as
+# dependências de verdade dele, com o motor ONNX (roda sem TensorFlow).
+onnxruntime>=1.17
+mir_eval>=0.6
+resampy>=0.2.2,<0.4.3
+scikit-learn>=1.0
+scipy>=1.4.1
+typing_extensions
+pretty_midi>=0.2.10
+
+# transcritor de guitarra de alta resolução (Riley et al., licença MIT):
+# o pacote do modelo vai pelo instalar.bat (--no-deps); aqui as dependências dele
+huggingface_hub>=0.20
+torchlibrosa>=0.1
+matplotlib>=3.5
+mido>=1.2
+
+# exportação para Guitar Pro
+PyGuitarPro>=0.9
+
+# baixar músicas por link (YouTube e outros); o imageio-ffmpeg traz o ffmpeg junto
+yt-dlp[default]>=2025.1
+imageio-ffmpeg>=0.5
+
+# velocidade e tom sem um mexer no outro (Signalsmith Stretch, MIT)
+python-stretch>=0.3
+
+# servidor
+fastapi>=0.110
+uvicorn[standard]>=0.27
+python-multipart>=0.0.9
+
+# gerar músicas com a conta do Suno (controla uma janela do Chrome/Edge já instalado)
+playwright>=1.45

@@ -1,0 +1,34 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# JARVIS Studio: local settings and recorded projects
+jarvis-studio/dados/
+jarvis-studio/projetos/
+
+# JARVIS MUSIC: analyses, downloaded models, bundled ffmpeg, built UI, Suno browser profile
+jarvis-music/backend/dados/
+jarvis-music/backend/modelos/
+jarvis-music/backend/bin/
+jarvis-music/backend/web/
+jarvis-music/backend/suno_perfil/
+
+# Node
+node_modules/
+dist/
+
+# Audio and model files
+*.wav
+*.mp3
+*.flac
+*.ckpt
+*.safetensors
+*.pt
+*.onnx
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
