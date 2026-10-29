@@ -1,0 +1,7 @@
+# JARVIS Studio: dependências (não precisa de PyTorch nem CUDA)
+sounddevice>=0.5     # placa de som, com ASIO no Windows
+pedalboard>=0.9.20   # efeitos em tempo real e plugins VST3
+numpy>=1.24
+soundfile>=0.12
+soxr>=0.3            # troca de taxa de amostragem
+pywebview>=5.0       # janela do app

@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>J.A.R.V.I.S STUDIO</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Rajdhani:wght@500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+<div id="app">
+  <header class="barra">
+    <div class="logo">J.A.R.V.I.S<small>STUDIO</small></div>
+    <div class="abas">
+      <button class="aba ativa" data-vista="estudio">Estúdio</button>
+      <button class="aba" data-vista="musica" title="Separar e analisar músicas (JARVIS MUSIC)">Músicas</button>
+    </div>
+    <div class="sep"></div>
+
+    <div class="grupo transporte so-estudio">
+      <button class="btn" id="b-inicio" title="Voltar ao início (Home)"><svg viewBox="0 0 24 24"><path d="M6 5h2v14H6zM20 5v14L9 12z"/></svg></button>
+      <button class="btn play" id="b-play" title="Tocar / pausar (Espaço)"><svg viewBox="0 0 24 24"><path d="M7 4v16l13-8z"/></svg></button>
+      <button class="btn" id="b-parar" title="Parar e voltar"><svg viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg></button>
+      <button class="btn rec" id="b-rec" title="Gravar (R)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/></svg></button>
+    </div>
+
+    <div class="relogio so-estudio"><div class="t" id="relogio">00:00.000</div><div class="c" id="compasso-atual">1.1</div></div>
+
+    <div class="grupo so-estudio">
+      <label class="campo">BPM <input type="number" id="i-bpm" min="20" max="400" step="0.1" value="120"></label>
+      <label class="campo">Compasso <input type="number" id="i-compasso" min="1" max="16" value="4" style="width:44px"></label>
+      <button class="btn" id="b-metro" title="Metrônomo (M)">Metrônomo</button>
+      <button class="btn" id="b-contagem" title="Conta um compasso antes de gravar">Contagem</button>
+      <button class="btn" id="b-loop" title="Loop (L). Arraste na régua para marcar o trecho">Loop</button>
+      <button class="btn" id="b-grade" title="Prender ao arrastar na batida">Grade</button>
+    </div>
+
+    <div class="grupo arquivo so-estudio">
+      <button class="btn" id="b-novo">Novo</button>
+      <button class="btn" id="b-abrir">Abrir</button>
+      <button class="btn" id="b-salvar" title="Ctrl+S">Salvar</button>
+      <button class="btn" id="b-importar" title="Trazer arquivos de áudio (os stems do JARVIS MUSIC, por exemplo)">Importar áudio</button>
+      <button class="btn" id="b-exportar">Exportar mix</button>
+      <button class="btn" id="b-audio">⚙ Áudio</button>
+    </div>
+    <div class="sep"></div>
+    <div class="grupo">
+      <div class="status" id="status">placa fechada</div>
+      <div class="medidor-master" title="Saída master"><i id="m-master"></i></div>
+      <input type="range" id="i-master" min="-30" max="6" step="0.5" value="0" title="Volume master" style="width:70px;flex:none">
+    </div>
+  </header>
+
+  <main class="area">
+    <div class="canto">
+      <button class="btn pequeno" id="b-faixa" title="Ctrl+T">+ Faixa</button>
+      <span class="espaco"></span>
+      <button class="btn pequeno" id="b-zoom-menos" title="Ctrl + roda do mouse">−</button>
+      <button class="btn pequeno" id="b-zoom-mais">+</button>
+    </div>
+    <div class="regua-wrap" id="regua-wrap"><canvas id="regua"></canvas></div>
+    <div class="corpo" id="corpo">
+      <div class="cabecalhos" id="cabecalhos"></div>
+      <div class="pistas" id="pistas"><canvas id="ondas"></canvas><canvas id="sobre"></canvas></div>
+    </div>
+    <div></div>
+    <div class="rolagem"><input type="range" id="i-rolagem" min="0" max="1000" value="0"></div>
+  </main>
+
+  <section class="painel-fx" id="painel-fx">
+    <div class="fx-topo">
+      <span class="titulo">EFEITOS</span>
+      <span class="faixa-nome" id="fx-faixa">—</span>
+      <button class="btn pequeno" id="b-add-fx">+ Efeito</button>
+      <span class="espaco"></span>
+      <button class="btn pequeno" id="b-fx-recolher">recolher</button>
+    </div>
+    <div class="cadeia" id="cadeia"></div>
+  </section>
+</div>
+
+<section class="vista-musica oculto" id="vista-musica">
+  <div class="musica-topo">
+    <span class="titulo">SEPARAR E ANALISAR</span>
+    <select id="m-analises" title="Músicas já analisadas"></select>
+    <button class="btn ligado" id="m-importar" title="Traz as faixas separadas para o estúdio, tocando pela placa">Abrir no estúdio</button>
+    <button class="btn pequeno" id="m-atualizar" title="Atualizar a lista">↻</button>
+    <span class="espaco"></span>
+    <span class="dica-musica">Para ouvir sem ruído e com efeitos, use <b>Abrir no estúdio</b>: lá o som sai pela placa (ASIO).</span>
+    <button class="btn pequeno" id="m-pasta" title="Escolher a pasta do JARVIS MUSIC">pasta…</button>
+  </div>
+  <div class="musica-corpo">
+    <div class="musica-msg" id="m-msg">Ligando o JARVIS MUSIC…</div>
+    <iframe id="m-frame" class="oculto" title="JARVIS MUSIC"></iframe>
+  </div>
+</section>
+
+<div class="fundo-modal oculto" id="modal-audio">
+  <div class="modal">
+    <h2>CONFIGURAR ÁUDIO</h2>
+    <div class="form">
+      <label>Driver</label><select id="c-api"></select>
+      <label>Entrada</label><select id="c-entrada"></select>
+      <label>Saída</label><select id="c-saida"></select>
+      <label>Taxa</label>
+      <select id="c-sr"><option>44100</option><option selected>48000</option><option>88200</option><option>96000</option></select>
+      <label>Buffer</label>
+      <select id="c-bloco"><option>64</option><option>128</option><option selected>256</option><option>512</option><option>1024</option></select>
+      <label id="l-exclusivo">WASAPI exclusivo</label><label id="w-exclusivo"><input type="checkbox" id="c-exclusivo"> usar a placa só para o JARVIS (menos atraso)</label>
+      <label>Ajuste de latência</label><input type="number" id="c-ajuste" value="0" step="16" title="Amostras a mais (ou a menos) para alinhar a gravação">
+    </div>
+    <p class="nota" id="c-info"></p>
+    <p class="nota">Use <b>ASIO</b> sempre que der: é o de menor atraso. Se a placa não tiver driver ASIO, instale o ASIO4ALL ou use WASAPI exclusivo.
+      Feche o Reaper (ou outro programa usando ASIO) antes, porque a maioria dos drivers só deixa um programa por vez. Comece com buffer 256; se estalar, suba para 512.</p>
+    <div class="erro-cfg" id="c-erro"></div>
+    <div class="acoes">
+      <button class="btn" id="c-cancelar">Fechar</button>
+      <button class="btn ligado" id="c-aplicar">Aplicar</button>
+    </div>
+  </div>
+</div>
+
+<div class="menu-fx oculto" id="menu-fx"></div>
+<div class="aviso oculto" id="aviso"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
